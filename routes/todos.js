@@ -1,7 +1,7 @@
 'use strict';
 var router = require('express').Router();
 var AV = require('leanengine');
-
+var moment = require('moment');
 var Todo = AV.Object.extend('Todo');
 
 // 查询 Todo 列表
@@ -9,6 +9,9 @@ router.get('/', function(req, res, next) {
   var query = new AV.Query(Todo);
   query.descending('createdAt');
   query.find().then(function(results) {
+      results.forEach(function (item) {
+          item.createdAt = moment(item.createdAt).format('YYYY-MM-DD HH:mm');
+      })
     res.render('todos', {
       title: 'TODO 列表',
       todos: results

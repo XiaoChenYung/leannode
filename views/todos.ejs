@@ -2,9 +2,9 @@
 <html>
   <head>
     <title>Todo</title>
-    <!--<link rel="stylesheet" href="../public/Semantic-UI-CSS-master/semantic.css">-->
+    <link rel="stylesheet" href="../public/Semantic-UI-CSS-master/semantic.css">
     <link rel="stylesheet" href="//cdn.bootcss.com/semantic-ui/2.1.8/semantic.min.css">
-      <!--<script src="../public/Semantic-UI-CSS-master/semantic.js"></script>-->
+      <script src="../public/Semantic-UI-CSS-master/semantic.js"></script>
       <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
       <script src="//cdn.bootcss.com/semantic-ui/2.1.8/semantic.min.js"></script>
       <style>
@@ -26,7 +26,7 @@
                 <tbody>
                     <% for(var i=0; i<todos.length; i++) {%>
                     <tr id="tr<%= todos[i].get('objectId')%>">
-                        <td><%= todos[i].get('createdAt') %></td>
+                        <td class="left aligned"><%= todos[i].get('createdAt') %></td>
                         <td><%= todos[i].get('content') %></td>
                         <td>
                             <input id="button<%= todos[i].get('objectId')%>" type="button" class="purple ui button" value="删除" onclick="deletetable()">
@@ -38,9 +38,15 @@
         </div>
         <div class="column">
             <form action="/todos" method="POST">
-                <div class="ui center action input">
-                    <input name="content" type="text" placeholder="请输入要保存的事件">
-                    <button  type="submit" class="ui teal right labeled icon button"> <i class="add icon"></i>添加</button>
+                <div class="ui grid action input">
+                    <div class="ten wide column">
+                        <input style="width: 100%" name="content" type="text" placeholder="请输入要保存的事件">
+                    </div>
+                    <div class="five wide column">
+                        <button  type="submit" class="ui teal right labeled icon button"> <i class="add icon"></i>添加</button>
+                    </div>
+
+
                 </div>
             </form>
 
@@ -53,6 +59,7 @@
     function deletetable() {
         var e = document.activeElement;
         var objectID = e.id.substring(6);
+        $('#tr' + objectID).remove();
         console.log(objectID);
         $.post("/todos/delete",{objectID: objectID}, function (data, status) {
             console.log(data);
