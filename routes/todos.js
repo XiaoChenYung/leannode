@@ -37,4 +37,16 @@ router.post('/', function(req, res, next) {
   }).catch(next);
 });
 
+// 删除todo 项目
+
+router.post('/delete', function (req, res, next) {
+    var objectID = req.body.objectID;
+    var todo = AV.Object.createWithoutData('Todo', objectID);
+    todo.destroy().then(function (success) {
+        console.log(success);
+    },function (error) {
+        console.log(error);
+    })
+})
+
 module.exports = router;

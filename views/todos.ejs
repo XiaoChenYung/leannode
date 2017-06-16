@@ -2,20 +2,60 @@
 <html>
   <head>
     <title>Todo</title>
-    <link rel="stylesheet" href="/stylesheets/style.css">
-    <link rel="stylesheet" href="../public/Semantic-UI-CSS-master/semantic.css">
+    <!--<link rel="stylesheet" href="../public/Semantic-UI-CSS-master/semantic.css">-->
     <link rel="stylesheet" href="//cdn.bootcss.com/semantic-ui/2.1.8/semantic.min.css">
+      <!--<script src="../public/Semantic-UI-CSS-master/semantic.js"></script>-->
+      <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+      <script src="//cdn.bootcss.com/semantic-ui/2.1.8/semantic.min.js"></script>
+      <style>
+          body {
+              padding: 10px;
+          }
+      </style>
   </head>
   <body>
-    <h1><%= title %></h1>
-    <form action="/todos" method="POST">
-      <input type="text" name="content" />
-      <button class="ui primary button" type="submit" value="新增"></button>
-    </form>
-    <ul>
-      <% for(var i=0; i<todos.length; i++) {%>
-      <li><%= todos[i].get('content') %></li>
-      <% } %>
-    </ul>
+  <h1 style="text-align: center"><%= title %></h1>
+    <div class="ui two column relaxed grid">
+        <div class="column">
+            <table class="ui right aligned table">
+                <thead>
+                    <th class="left aligned">创建时间</th>
+                    <th>内容</th>
+                    <th>操作</th>
+                    </thead>
+                <tbody>
+                    <% for(var i=0; i<todos.length; i++) {%>
+                    <tr id="tr<%= todos[i].get('objectId')%>">
+                        <td><%= todos[i].get('createdAt') %></td>
+                        <td><%= todos[i].get('content') %></td>
+                        <td>
+                            <input id="button<%= todos[i].get('objectId')%>" type="button" class="purple ui button" value="删除" onclick="deletetable()">
+                        </td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+        <div class="column">
+            <form action="/todos" method="POST">
+                <div class="ui center action input">
+                    <input name="content" type="text" placeholder="请输入要保存的事件">
+                    <button  type="submit" class="ui teal right labeled icon button"> <i class="add icon"></i>添加</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
   </body>
 </html>
+
+<script type="text/javascript">
+    function deletetable() {
+        var e = document.activeElement;
+        var objectID = e.id.substring(6);
+        console.log(objectID);
+        $.post("/todos/delete",{objectID: objectID}, function (data, status) {
+            console.log(data);
+        },'json')
+    }
+</script>
