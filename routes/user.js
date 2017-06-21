@@ -11,4 +11,8 @@ router.get('/singup', function (req, res, next) {
     res.render('singup');
 })
 
+router.post('/singup', function (req, res, next) {
+    res.redirect('index')
+})
+
 module.exports = router;
